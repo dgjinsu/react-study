@@ -1,67 +1,23 @@
 package todo_app_server.domain.todo.service;
 
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import todo_app_server.domain.todo.dto.*;
-import todo_app_server.domain.todo.entity.Todo;
-import todo_app_server.domain.todo.repository.TodoRepository;
+import todo_app_server.domain.todo.dto.TodoListResponse;
+import todo_app_server.domain.todo.dto.TodoSaveRequest;
+import todo_app_server.domain.todo.dto.TodoUpdateRequest;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public interface TodoService {
 
-@Service
-@Transactional
-@RequiredArgsConstructor
-@Slf4j
-public class TodoService {
-    private final TodoRepository todoRepository;
+    // 아이템 저장
+    Long saveTodo(TodoSaveRequest request);
 
-    /**
-     * todo 저장
-     */
-    public Long saveTodo(TodoSaveRequest request) {
-        Todo todo = Todo.createEntity(request);
-        return todoRepository.save(todo).getId();
-    }
+    // 아이템 list 조회
+    TodoListResponse getTodoList();
 
-    /**
-     * todo list 조회
-     */
-    @Transactional(readOnly = true)
-    public TodoListResponse getTodoList() {
-        List<Todo> todoList = todoRepository.findAll();
-        return TodoListResponse.from(todoList);
-    }
+    // 아이템 업데이트
+    void updateTodoContent(Long todoId, TodoUpdateRequest request);
 
-    /**
-     * todo content 업데이트
-     * @param request
-     */
-    public void updateTodoContent(TodoContentUpdateRequest request) {
-        Todo todo = todoRepository.findById(request.getTodoId())
-                .orElseThrow(() -> new EntityNotFoundException("정보를 찾을 수 없습니다."));
+    // 완료된 아이템 제거
+    void deleteCompletedTodo();
 
-        todo.updateContent(request);
-    }
-
-    /**
-     * todo 완료 여부 업데이트
-     */
-    public void updateTodoCompleted(TodoCompleteUpdateRequest request) {
-        Todo todo = todoRepository.findById(request.getTodoId())
-                .orElseThrow(() -> new EntityNotFoundException("정보를 찾을 수 없습니다."));
-
-        todo.updateCompleted(request);
-    }
-
-    /**
-     * 완료된 todo 제거
-     */
-    public void deleteCompletedTodo() {
-        int deletedTodoCnt = todoRepository.deleteCompletedTodo();
-        log.info("제거된 TODO 수: {}", deletedTodoCnt);
-    }
+    // 하나의 아이템 제거
+    void deleteTodoById(Long todoId);
 }

@@ -1,0 +1,18 @@
+package todo_app_server.global.exception;
+
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
+public class TodoAppException extends RuntimeException {
+    private final HttpStatus status;
+    private final String errorCode;
+    private final String errorMessage;
+
+    public TodoAppException(ErrorCode errorCode) {
+        super(errorCode.getErrorMessage());
+        this.status = errorCode.getStatus();
+        this.errorCode = errorCode.getCode();
+        this.errorMessage = errorCode.getErrorMessage();
+    }
+}

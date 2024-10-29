@@ -8,8 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import todo_app_server.domain.todo.dto.TodoCompleteUpdateRequest;
-import todo_app_server.domain.todo.dto.TodoContentUpdateRequest;
+import todo_app_server.domain.todo.dto.TodoUpdateRequest;
 import todo_app_server.domain.todo.dto.TodoSaveRequest;
 
 @Entity
@@ -41,11 +40,8 @@ public class Todo {
                 .build();
     }
 
-    public void updateContent(TodoContentUpdateRequest request) {
+    public void updateTodo(TodoUpdateRequest request) {
         this.content = request.getContent();
-    }
-
-    public void updateCompleted(TodoCompleteUpdateRequest request) {
         this.isCompleted = request.getIsComplete();
     }
 }
