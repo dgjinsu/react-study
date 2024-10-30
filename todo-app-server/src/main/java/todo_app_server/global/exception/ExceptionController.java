@@ -17,7 +17,7 @@ public class ExceptionController {
     @ExceptionHandler(TodoAppException.class)
     public ResponseEntity<?> handleCustomException(TodoAppException e) {
         String errorLocation = logError(e);
-        ErrorResponse errorResponse = buildErrorResponse(e.getStatus(), e.getErrorCode(), e.getErrorMessage(), errorLocation);
+        ErrorResponse errorResponse = buildErrorResponse(e.getErrorName(), e.getStatus(), e.getErrorCode(), e.getErrorMessage(), errorLocation);
         return ResponseEntity.status(e.getStatus()).body(new Response<>(errorResponse, "커스텀 예외 반환"));
     }
 
@@ -45,10 +45,11 @@ public class ExceptionController {
         return errorLocation;
     }
 
-    private ErrorResponse buildErrorResponse(HttpStatus status, String code, String errorMessage, String errorLocation) {
+    private ErrorResponse buildErrorResponse(ErrorCode errorName, HttpStatus status, String errorCode, String errorMessage, String errorLocation) {
         return ErrorResponse.builder()
+                .errorName(errorName)
                 .status(status)
-                .code(code)
+                .errorCode(errorCode)
                 .errorMessage(errorMessage)
                 .errorLocation(errorLocation)
                 .build();

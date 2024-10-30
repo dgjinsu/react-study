@@ -1,6 +1,5 @@
 package todo_app_server.domain.todo.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,14 +18,16 @@ import java.util.List;
 @Slf4j
 public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
+    private final TodoMapper todoMapper;
 
     /**
      * 아이템 저장
      */
     @Override
-    public Long saveTodo(TodoSaveRequest request) {
-        Todo todo = Todo.createEntity(request);
-        return todoRepository.save(todo).getId();
+    public TodoResponse saveTodo(TodoSaveRequest request) {
+        Todo todo = todoMapper.toEntity(request);
+        Todo savedTodo = todoRepository.save(todo);
+        return todoMapper.toResponse(savedTodo);
     }
 
     /**
@@ -36,18 +37,20 @@ public class TodoServiceImpl implements TodoService {
     @Transactional(readOnly = true)
     public TodoListResponse getTodoList() {
         List<Todo> todoList = todoRepository.findAll();
-        return TodoListResponse.from(todoList);
+        return todoMapper.toResponseList(todoList);
     }
 
     /**
      * 아이템 업데이트
      */
     @Override
-    public void updateTodoContent(Long todoId, TodoUpdateRequest request) {
+    public TodoResponse updateTodo(Long todoId, TodoUpdateRequest request) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new TodoAppException(ErrorCode.TODO_NOT_FOUND));
 
         todo.updateTodo(request);
+
+        return todoMapper.toResponse(todo);
     }
 
     /**

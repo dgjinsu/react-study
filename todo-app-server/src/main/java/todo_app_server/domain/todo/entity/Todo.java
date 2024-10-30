@@ -25,23 +25,21 @@ public class Todo {
     private String content;
 
     @Column(nullable = false)
-    private Boolean isCompleted;
+    private boolean isCompleted;
 
     @Builder
-    public Todo(String content, Boolean isCompleted) {
+    public Todo(String content, boolean isCompleted) {
         this.content = content;
         this.isCompleted = isCompleted;
     }
 
-    public static Todo createEntity(TodoSaveRequest request) {
-        return Todo.builder()
-                .content(request.getContent())
-                .isCompleted(false)
-                .build();
-    }
-
     public void updateTodo(TodoUpdateRequest request) {
-        this.content = request.getContent();
-        this.isCompleted = request.getIsComplete();
+        if (request.getContent() != null) {
+            this.content = request.getContent();
+        }
+
+        if (request.getIsComplete() != null) {
+            this.isCompleted = request.getIsComplete();
+        }
     }
 }
