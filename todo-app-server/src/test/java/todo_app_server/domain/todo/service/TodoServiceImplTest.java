@@ -18,6 +18,7 @@ import todo_app_server.domain.todo.repository.TodoRepository;
 import todo_app_server.global.exception.ErrorCode;
 import todo_app_server.global.exception.TodoAppException;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.*;
 class TodoServiceImplTest {
     @Mock
     private TodoRepository todoRepository;
+//    인터페이스 spy 해도 어차피 stub해야하는데 왜 나누지
 
     @InjectMocks
     private TodoServiceImpl todoService;
@@ -48,7 +50,7 @@ class TodoServiceImplTest {
     @DisplayName("아이템 저장 성공 테스트")
     void saveTodoTest() {
         // given
-        TodoSaveRequest request = new TodoSaveRequest();
+        TodoSaveRequest request = TodoSaveRequest.builder().build();
         Todo todo = todoMapper.toEntity(request);
         ReflectionTestUtils.setField(todo, "id", 1L);
 
@@ -58,9 +60,9 @@ class TodoServiceImplTest {
         TodoResponse todoResponse = todoService.saveTodo(request);
 
         // then
-        assertEquals(todo.getId(), todoResponse.getTodoId());
-        assertEquals(todo.getContent(), todoResponse.getContent());
-        assertEquals(todo.isCompleted(), todoResponse.isCompleted());
+        assertEquals(todo.getId(), todoResponse.todoId());
+        assertEquals(todo.getContent(), todoResponse.content());
+        assertEquals(todo.getIsCompleted(), todoResponse.isCompleted());
         verify(todoRepository, times(1)).save(any(Todo.class));
     }
 
@@ -80,7 +82,7 @@ class TodoServiceImplTest {
         TodoListResponse response = todoService.getTodoList();
 
         // then
-        assertEquals(2, response.getTodoListResponseList().size());
+        assertEquals(2, response.todoResponseList().size());
         verify(todoRepository, times(1)).findAll();
     }
 
@@ -99,8 +101,8 @@ class TodoServiceImplTest {
         todoService.updateTodo(todoId, request);
 
         // then
-        assertEquals(request.getContent(), todo.getContent());
-        assertEquals(request.getIsComplete(), todo.isCompleted());
+        assertEquals(request.content(), todo.getContent());
+        assertEquals(request.isComplete(), todo.getIsCompleted());
         verify(todoRepository, times(1)).findById(todoId);
     }
 

@@ -10,6 +10,7 @@ import todo_app_server.domain.todo.repository.TodoRepository;
 import todo_app_server.global.exception.ErrorCode;
 import todo_app_server.global.exception.TodoAppException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,6 +37,8 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @Transactional(readOnly = true)
     public TodoListResponse getTodoList() {
+        LocalDateTime now = LocalDateTime.now();
+        log.info("현재 시각 :{}", now);
         List<Todo> todoList = todoRepository.findAll();
         return todoMapper.toResponseList(todoList);
     }

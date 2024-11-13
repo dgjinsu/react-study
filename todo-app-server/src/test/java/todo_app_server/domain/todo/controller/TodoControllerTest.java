@@ -14,7 +14,8 @@ import todo_app_server.domain.todo.dto.TodoSaveRequest;
 import todo_app_server.domain.todo.dto.TodoUpdateRequest;
 import todo_app_server.domain.todo.service.TodoService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,8 +39,8 @@ class TodoControllerTest {
     @DisplayName("TODO 저장")
     void saveTodoTest() throws Exception {
         // given
-        TodoSaveRequest request = new TodoSaveRequest();
-        TodoResponse todoResponse = new TodoResponse();
+        TodoSaveRequest request = TodoSaveRequest.builder().build();
+        TodoResponse todoResponse = TodoResponse.builder().build();
         when(todoService.saveTodo(any(TodoSaveRequest.class))).thenReturn(todoResponse);
 
         // when & then
@@ -58,7 +59,7 @@ class TodoControllerTest {
     @DisplayName("TODO 리스트 조회")
     void getTodoListTest() throws Exception {
         // given
-        TodoListResponse todoListResponse = new TodoListResponse();
+        TodoListResponse todoListResponse = TodoListResponse.builder().build();
         when(todoService.getTodoList()).thenReturn(todoListResponse);
 
         // when & then
@@ -76,7 +77,7 @@ class TodoControllerTest {
     void updateTodoTest() throws Exception {
         // given
         Long todoId = 1L;
-        TodoUpdateRequest request = new TodoUpdateRequest();
+        TodoUpdateRequest request = TodoUpdateRequest.builder().build();
 
         // when & then
         mockMvc.perform(patch("/api/v1/todos/{todoId}", todoId)

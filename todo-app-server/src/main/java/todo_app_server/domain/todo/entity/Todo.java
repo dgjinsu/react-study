@@ -25,7 +25,7 @@ public class Todo {
     private String content;
 
     @Column(nullable = false)
-    private boolean isCompleted;
+    private Boolean isCompleted;
 
     @Builder
     public Todo(String content, boolean isCompleted) {
@@ -34,12 +34,12 @@ public class Todo {
     }
 
     public void updateTodo(TodoUpdateRequest request) {
-        if (request.getContent() != null) {
-            this.content = request.getContent();
+        if (request.content() != null) {
+            this.content = request.content();
         }
 
-        if (request.getIsComplete() != null) {
-            this.isCompleted = request.getIsComplete();
+        if (request.isComplete() != null) {
+            this.isCompleted = request.isComplete();
         }
     }
 }

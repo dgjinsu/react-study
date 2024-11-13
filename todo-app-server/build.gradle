@@ -41,6 +41,12 @@ dependencies {
 	// map struct
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+	// test container
+	testImplementation 'org.testcontainers:testcontainers:1.16.0'
+	testImplementation 'org.testcontainers:junit-jupiter:1.16.2'
+	testImplementation 'org.testcontainers:postgresql:1.17.6'     // PostgreSQL 컨테이너 사용
+	testImplementation 'org.testcontainers:jdbc:1.16.0'           // DB와의 JDBC connection
 }
 
 tasks.named('test') {

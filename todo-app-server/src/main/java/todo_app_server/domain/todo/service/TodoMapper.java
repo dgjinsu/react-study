@@ -20,6 +20,7 @@ public interface TodoMapper {
     Todo toEntity(TodoSaveRequest request);
 
     @Mapping(source = "id", target = "todoId")
+    @Mapping(target = "isCompleted", source = "isCompleted")  // isCompleted 필드 매핑 명시
     TodoResponse toResponse(Todo todo);
 
     default TodoListResponse toResponseList(List<Todo> todoList) {
@@ -32,7 +33,7 @@ public interface TodoMapper {
                 .count();
 
         return TodoListResponse.builder()
-                .todoListResponseList(todoResponseList)
+                .todoResponseList(todoResponseList)
                 .totalTodoNum(totalTodoNum)
                 .completedTodoNum(completedTodoNum)
                 .build();
